@@ -22,7 +22,7 @@ class SmartUrl:
         self.port = parsed_url.port
         self.protocol = parsed_url.scheme if parsed_url.scheme else None
         self.is_secure = bool(re.match(r"(https|wss)", self.protocol)) if self.protocol else False
-        self.path = parsed_url.path
+        self.path = parsed_url.path if parsed_url.path else '/'
         self.query = dict(parse_qsl(parsed_url.query))
 
         self.netloc = parsed_url.netloc

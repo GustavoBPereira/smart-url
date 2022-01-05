@@ -43,7 +43,7 @@ class SmartUrlTest(TestCase):
 
     def test_root_path_without_last_slash(self):
         url_without_slash = SmartUrl('https://www.google.com')
-        self.assertEqual('/', self.url.path)
+        self.assertEqual('/', url_without_slash.path)
 
     def test_path(self):
         url_with_path = SmartUrl('https://www.google.com/path/test/')
