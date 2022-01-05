@@ -10,6 +10,10 @@ class SmartUrlTest(TestCase):
     def test_str(self):
         self.assertEqual('https://www.google.com/', str(self.url))
 
+    def test_str_without_last_slash(self):
+        url_without_last_slash = SmartUrl('https://www.google.com')
+        self.assertEqual('https://www.google.com/', str(url_without_last_slash))
+
     def test_host(self):
         self.assertEqual('www.google.com', self.url.host)
 
