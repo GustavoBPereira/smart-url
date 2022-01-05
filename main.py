@@ -2,6 +2,19 @@ import re
 from urllib.parse import urlparse, urlunparse, urlencode, parse_qsl
 
 
+
+class SmartUrlPath(str):
+    def __truediv__(self, other):
+        """Soma os caminhos relativos considerando os separadores"""
+        if self.endswith('/'):
+            value = self + other.lstrip('/')
+        elif other.startswith('/'):
+            value = self + other
+        else:
+            value = self + '/' + other
+        return self.__class__(value)
+
+
 class SmartUrl:
     def __init__(self, url):
         parsed_url = urlparse(url)
@@ -23,6 +36,5 @@ class SmartUrl:
         return self
 
     def append_path(self, path):
-        self.path += path
-        self.path = self.path.replace('//', '/').replace(' ', '')
+        self.path = SmartUrlPath(self.path) / path
         return self
