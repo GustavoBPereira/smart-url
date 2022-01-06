@@ -76,6 +76,24 @@ class SmartUrlTest(TestCase):
         self.url.append_path('/path/test')
         self.assertEqual('/path/test', self.url.path)
 
+    def test_change_path(self):
+        url = SmartUrl('https://www.google.com/unchanged/path')
+        self.assertEqual('/unchanged/path', url.path)
+        url.change_path('/changed')
+        self.assertEqual('/changed', url.path)
+
+    def test_change_path_without_first_slash(self):
+        url = SmartUrl('https://www.google.com/unchanged/path')
+        self.assertEqual('/unchanged/path', url.path)
+        url.change_path('changed')
+        self.assertEqual('/changed', url.path)
+
+    def test_change_path_with_last_slash(self):
+        url = SmartUrl('https://www.google.com/unchanged/path')
+        self.assertEqual('/unchanged/path', url.path)
+        url.change_path('/changed/')
+        self.assertEqual('/changed/', url.path)
+
     def test_without_query(self):
         self.assertEqual({}, self.url.query)
 

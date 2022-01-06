@@ -12,8 +12,14 @@ class SmartUrlPath(str):
             value = self + other
         else:
             value = self + '/' + other
-        return self.__class__(value)
+        return self.__class__(self.sanitize_path(value))
 
+    @staticmethod
+    def sanitize_path(path):
+        value = path.replace('//', '/').replace(' ', '')
+        if not value.startswith('/'):
+            value = f'/{value}'
+        return value
 
 class SmartUrl:
     def __init__(self, url):
@@ -37,4 +43,8 @@ class SmartUrl:
 
     def append_path(self, path):
         self.path = SmartUrlPath(self.path) / path
+        return self
+
+    def change_path(self, new_path):
+        self.path = SmartUrlPath.sanitize_path(new_path)
         return self
