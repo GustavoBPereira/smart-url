@@ -101,6 +101,13 @@ class SmartUrlTest(TestCase):
         url_with_query = SmartUrl('https://www.google.com/?param=qwe&another_param=123')
         self.assertDictEqual({'param': 'qwe', 'another_param': '123'}, url_with_query.query)
 
+    def test_change_query(self):
+        self.assertDictEqual({}, self.url.query)
+        self.url.update_query({'test1': '1', 'test2': '2'})
+        self.assertDictEqual({'test1': '1', 'test2': '2'}, self.url.query)
+        self.url.change_query({'test3': '3'})
+        self.assertDictEqual({'test3': '3'}, self.url.query)
+
     def test_append_param(self):
         self.assertDictEqual({}, self.url.query)
         self.url.update_query({'param':'qwe'})

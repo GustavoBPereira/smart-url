@@ -29,6 +29,12 @@ class SmartUrlTest(TestCase):
         self.path.update_query({'new_test': '123'})
         self.assertEqual('/path/test?test=qwe&new_test=123', str(self.path))
 
+    def test_change_query(self):
+        self.assertDictEqual({}, self.path.query)
+        self.path.update_query({'test1': '1', 'test2': '2'})
+        self.assertDictEqual({'test1': '1', 'test2': '2'}, self.path.query)
+        self.path.change_query({'test3': '3'})
+        self.assertDictEqual({'test3': '3'}, self.path.query)
 
     def test_anchor(self):
         self.path = SmartPath('/path/test', anchor='article-1')

@@ -57,6 +57,10 @@ class SmartPath:
         self.query.update(param)
         return self
 
+    def change_query(self, param):
+        self.query = param
+        return self
+
     def append_path(self, path):
         self.path = PathUtils(self.path) / path
         return self
