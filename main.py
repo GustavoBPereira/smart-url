@@ -3,7 +3,7 @@ from urllib.parse import urlparse, urlunparse, urlencode, parse_qsl
 
 
 
-class SmartUrlPath(str):
+class PathUtils(str):
     def __truediv__(self, other):
         """Soma os caminhos relativos considerando os separadores"""
         if self.endswith('/'):
@@ -21,6 +21,12 @@ class SmartUrlPath(str):
             value = f'/{value}'
         return value
 
+    @staticmethod
+    def sanitize_anchor(anchor):
+        value = anchor.replace('//', '/').replace(' ', '').replace('#', '')
+        return value
+
+
 class SmartUrl:
     def __init__(self, url):
         parsed_url = urlparse(url)
@@ -32,19 +38,22 @@ class SmartUrl:
         self.query = dict(parse_qsl(parsed_url.query))
 
         self.netloc = parsed_url.netloc
-        self.fragment = parsed_url.fragment
+        self.anchor = parsed_url.fragment
 
     def __str__(self):
-        return urlunparse([self.protocol, self.netloc, self.path, None, urlencode(self.query, encoding='utf-8'), self.fragment])
+        return urlunparse([self.protocol, self.netloc, self.path, None, urlencode(self.query, encoding='utf-8'), self.anchor])
 
     def append_query(self, param):
         self.query.update(param)
         return self
 
     def append_path(self, path):
-        self.path = SmartUrlPath(self.path) / path
+        self.path = PathUtils(self.path) / path
         return self
 
     def change_path(self, new_path):
-        self.path = SmartUrlPath.sanitize_path(new_path)
+        self.path = PathUtils.sanitize_path(new_path)
         return self
+
+    def change_anchor(self, anchor):
+        self.anchor = PathUtils.sanitize_anchor(anchor)

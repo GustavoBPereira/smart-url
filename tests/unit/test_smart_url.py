@@ -112,3 +112,12 @@ class SmartUrlTest(TestCase):
         self.assertDictEqual({}, self.url.query)
         self.url.append_query({'stacked_call1':'call1'}).append_query({'stacked_call2':'call2'})
         self.assertDictEqual({'stacked_call1': 'call1', 'stacked_call2': 'call2'}, self.url.query)
+
+
+    def test_anchor(self):
+        url = SmartUrl('https://www.google.com/path')
+        self.assertEqual('https://www.google.com/path', str(url))
+        url.change_anchor('#article-test')
+        self.assertEqual('https://www.google.com/path#article-test', str(url))
+        url.change_anchor('alterated-anchor-without-sharp')
+        self.assertEqual('https://www.google.com/path#alterated-anchor-without-sharp', str(url))
