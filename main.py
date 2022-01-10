@@ -22,9 +22,49 @@ class PathUtils(str):
         return value
 
     @staticmethod
-    def sanitize_anchor(anchor):
+    def sanitize_anchor(anchor, with_sharp=False):
         value = anchor.replace('//', '/').replace(' ', '').replace('#', '')
+        if value and with_sharp and not value.startswith('#'):
+            value = f'#{value}'
         return value
+
+    @staticmethod
+    def sanitize_query(query):
+        if not query:
+            return ''
+        value = query.replace(' ', '')
+        if not value.startswith('?'):
+            value = f'?{value}'
+        return value
+
+
+class SmartPath:
+    def __init__(self, path, query=None, anchor=''):
+        if query is None:
+            self.query = {}
+        else:
+            self.query = query
+        self.path = PathUtils.sanitize_path(path)
+        self.anchor = PathUtils.sanitize_anchor(anchor, with_sharp=True)
+
+    def __str__(self):
+        query = PathUtils.sanitize_query(urlencode(self.query))
+        return f"{self.path if self.path else '/'}{query}{self.anchor}"
+
+    def append_query(self, param):
+        self.query.update(param)
+        return self
+
+    def append_path(self, path):
+        self.path = PathUtils(self.path) / path
+        return self
+
+    def change_path(self, new_path):
+        self.path = PathUtils.sanitize_path(new_path)
+        return self
+
+    def change_anchor(self, anchor):
+        self.anchor = PathUtils.sanitize_anchor(anchor, with_sharp=True)
 
 
 class SmartUrl:
