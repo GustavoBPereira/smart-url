@@ -39,6 +39,8 @@ class PathUtils(str):
 
 
 class SmartPath:
+    use_sharp_in_anchor = True
+
     def __init__(self, path, query=None, anchor=''):
         if query is None:
             self.query = {}
@@ -64,10 +66,12 @@ class SmartPath:
         return self
 
     def change_anchor(self, anchor):
-        self.anchor = PathUtils.sanitize_anchor(anchor, with_sharp=True)
+        self.anchor = PathUtils.sanitize_anchor(anchor, with_sharp=self.use_sharp_in_anchor)
 
 
-class SmartUrl:
+class SmartUrl(SmartPath):
+    use_sharp_in_anchor = False
+
     def __init__(self, url):
         parsed_url = urlparse(url)
         self.host = parsed_url.hostname
@@ -82,18 +86,3 @@ class SmartUrl:
 
     def __str__(self):
         return urlunparse([self.protocol, self.netloc, self.path, None, urlencode(self.query, encoding='utf-8'), self.anchor])
-
-    def append_query(self, param):
-        self.query.update(param)
-        return self
-
-    def append_path(self, path):
-        self.path = PathUtils(self.path) / path
-        return self
-
-    def change_path(self, new_path):
-        self.path = PathUtils.sanitize_path(new_path)
-        return self
-
-    def change_anchor(self, anchor):
-        self.anchor = PathUtils.sanitize_anchor(anchor)
