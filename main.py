@@ -19,6 +19,8 @@ class PathUtils(str):
         value = path.replace('//', '/').replace(' ', '')
         if not value.startswith('/'):
             value = f'/{value}'
+        value = value.split('?')[0]
+        value = value.split('#')[0]
         return value
 
     @staticmethod
@@ -37,6 +39,21 @@ class PathUtils(str):
             value = f'?{value}'
         return value
 
+    @staticmethod
+    def dismember_path(path):
+        query = path.split('?')
+        if len(query) > 1:
+            query = query[1].split('#')
+            query = query[0]
+        else:
+            query = ''
+
+        anchor = path.split('#')
+        if len(anchor) > 1:
+            anchor = anchor[1]
+        else:
+            anchor = ''
+        return query, anchor
 
 class SmartPath:
     use_sharp_in_anchor = True
@@ -46,8 +63,17 @@ class SmartPath:
             self.query = {}
         else:
             self.query = query
+
+        query_in_path, anchor_in_path = PathUtils.dismember_path(path)
+
+        if query_in_path:
+            self.query.update(dict(parse_qsl(query_in_path)))
+
+        self.anchor = PathUtils.sanitize_anchor(anchor, with_sharp=self.use_sharp_in_anchor)
+        if anchor_in_path and not anchor:
+            self.anchor = PathUtils.sanitize_anchor(anchor_in_path, with_sharp=self.use_sharp_in_anchor)
+
         self.path = PathUtils.sanitize_path(path)
-        self.anchor = PathUtils.sanitize_anchor(anchor, with_sharp=True)
 
     def __str__(self):
         query = PathUtils.sanitize_query(urlencode(self.query))

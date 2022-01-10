@@ -45,3 +45,24 @@ class SmartUrlTest(TestCase):
         self.assertEqual('/path/test#article-1', str(self.path))
         self.path.change_anchor('test-edit-anchor')
         self.assertEqual('/path/test#test-edit-anchor', str(self.path))
+
+    def test_path_with_param(self):
+        self.path = SmartPath('/path/test?test=1')
+        self.assertEqual(self.path.path, '/path/test')
+        self.assertDictEqual(self.path.query, {'test': '1'})
+
+    def test_path_with_anchor(self):
+        self.path = SmartPath('/path/test#article-1')
+        self.assertEqual(self.path.path, '/path/test')
+        self.assertEqual(self.path.anchor, '#article-1')
+
+    def test_path_with_query_and_anchor(self):
+        self.path = SmartPath('/path/test/?test=1&test2=2#article-1')
+        self.assertEqual(self.path.path, '/path/test/')
+        self.assertDictEqual(self.path.query, {'test': '1', 'test2': '2'})
+        self.assertEqual(self.path.anchor, '#article-1')
+
+    def test_override_anchor_in_path(self):
+        self.path = SmartPath('/path/test/#article-1', anchor='article-2')
+        self.assertEqual(self.path.path, '/path/test/')
+        self.assertEqual(self.path.anchor, '#article-2')
