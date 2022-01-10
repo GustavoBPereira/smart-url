@@ -53,7 +53,7 @@ class SmartPath:
         query = PathUtils.sanitize_query(urlencode(self.query))
         return f"{self.path if self.path else '/'}{query}{self.anchor}"
 
-    def append_query(self, param):
+    def update_query(self, param):
         self.query.update(param)
         return self
 

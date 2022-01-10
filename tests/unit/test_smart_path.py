@@ -26,7 +26,7 @@ class SmartUrlTest(TestCase):
 
     def test_append_query(self):
         self.path = SmartPath('/path/test', query={'test': 'qwe'})
-        self.path.append_query({'new_test': '123'})
+        self.path.update_query({'new_test': '123'})
         self.assertEqual('/path/test?test=qwe&new_test=123', str(self.path))
 
 

@@ -103,14 +103,14 @@ class SmartUrlTest(TestCase):
 
     def test_append_param(self):
         self.assertDictEqual({}, self.url.query)
-        self.url.append_query({'param':'qwe'})
+        self.url.update_query({'param':'qwe'})
         self.assertDictEqual({'param':'qwe'}, self.url.query)
-        self.url.append_query({'param':'alterated', 'another_param': ['123', '456']})
+        self.url.update_query({'param':'alterated', 'another_param': ['123', '456']})
         self.assertDictEqual({'param':'alterated', 'another_param': ['123', '456']}, self.url.query)
 
     def test_stacked_append(self):
         self.assertDictEqual({}, self.url.query)
-        self.url.append_query({'stacked_call1':'call1'}).append_query({'stacked_call2':'call2'})
+        self.url.update_query({'stacked_call1':'call1'}).update_query({'stacked_call2':'call2'})
         self.assertDictEqual({'stacked_call1': 'call1', 'stacked_call2': 'call2'}, self.url.query)
 
 
