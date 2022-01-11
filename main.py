@@ -80,7 +80,8 @@ class SmartPath:
         return f"{self.path if self.path else '/'}{query}{self.anchor}"
 
     def update_query(self, param):
-        self.query.update(param)
+        if param:
+            self.query.update(param)
         return self
 
     def change_query(self, param):
