@@ -2,7 +2,6 @@ import re
 from urllib.parse import urlparse, urlunparse, urlencode, parse_qsl
 
 
-
 class PathUtils(str):
     def __truediv__(self, other):
         """Soma os caminhos relativos considerando os separadores"""
@@ -54,6 +53,7 @@ class PathUtils(str):
         else:
             anchor = ''
         return query, anchor
+
 
 class SmartPath:
     use_sharp_in_anchor = True
@@ -116,4 +116,5 @@ class SmartUrl(SmartPath):
         self.anchor = parsed_url.fragment
 
     def __str__(self):
-        return urlunparse([self.protocol, self.netloc, self.path, None, urlencode(self.query, encoding='utf-8'), self.anchor])
+        return urlunparse(
+            [self.protocol, self.netloc, self.path, None, urlencode(self.query, encoding='utf-8'), self.anchor])
