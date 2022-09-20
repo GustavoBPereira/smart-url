@@ -1,5 +1,6 @@
 from unittest import TestCase
-from src.main import SmartUrl
+
+from src.smart_url.main import SmartUrl
 
 
 class SmartUrlTest(TestCase):
