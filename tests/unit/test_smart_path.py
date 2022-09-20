@@ -1,5 +1,5 @@
 from unittest import TestCase
-from main import SmartPath
+from src.main import SmartPath
 
 
 class SmartUrlTest(TestCase):
