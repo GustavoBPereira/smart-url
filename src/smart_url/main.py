@@ -1,7 +1,7 @@
 import re
 from urllib.parse import urlparse, urlunparse, urlencode, parse_qsl
 
-from src.smart_url.utils import PathUtils
+from smart_url.utils import PathUtils
 
 
 class SmartPath:
